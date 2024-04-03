@@ -2,12 +2,12 @@
 
 import * as React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
-import { Button, AppBar, Toolbar, CssBaseline, TextField, Chip } from '@mui/material';
+import { Button, AppBar, Toolbar, CssBaseline, TextField, Chip, Box } from '@mui/material';
 import { FaBars } from 'react-icons/fa';
-import theme from './theme';
+import RootTheme from './theme';
 import dateToStr from './dateUtil';
 
-const useTodoStatus = () => {
+function useTodoStatus() {
   console.log('실행 1');
 
   const [todos, setTodos] = React.useState([]);
@@ -21,7 +21,7 @@ const useTodoStatus = () => {
       content: newContent,
       regDate: dateToStr(new Date()),
     };
-    setTodos((todos) => [...todos, newTodo]);
+    setTodos((todos) => [newTodo, ...todos]);
   };
 
   const removeTodo = (id) => {
@@ -40,7 +40,7 @@ const useTodoStatus = () => {
     removeTodo,
     modifyTodo,
   };
-};
+}
 
 const NewTodoForm = ({ todoStatus }) => {
   const [newTodoTitle, setNewTodoTitle] = useState('');
@@ -150,14 +150,14 @@ const TodoList = ({ todoStatus }) => {
 
 let AppCallCount = 0;
 
-const App = () => {
-  //AppCallCount++;
-  //console.log(`AppCallCount : ${AppCallCount}`);
+function App() {
+  AppCallCount++;
+  console.log(`AppCallCount : ${AppCallCount}`);
 
   const todosState = useTodoStatus(); // 리액트 커스텀 훅
 
   React.useEffect(() => {
-    todosState.addTodo('스쿼트');
+    todosState.addTodo('스쿼트\n런지');
     todosState.addTodo('벤치');
     todosState.addTodo('데드');
   }, []);
@@ -199,7 +199,15 @@ const App = () => {
       </AppBar>
       <Toolbar />
       <form className="tw-flex tw-flex-col tw-p-4 tw-gap-2" onSubmit={onSubmit}>
-        <TextField name="content" autoComplete="off" label="할 일을 입력해" variant="outlined" />
+        <TextField
+          multiline
+          minRows={3}
+          maxRows={10}
+          name="content"
+          autoComplete="off"
+          label="할 일을 입력해"
+          variant="outlined"
+        />
         <Button className="tw-font-bold" variant="contained" type="submit">
           추가
         </Button>
@@ -210,10 +218,17 @@ const App = () => {
           {todosState.todos.map((todo) => (
             <li key={todo.id}>
               <div className="tw-flex tw-flex-col tw-gap-2 tw-mt-[30px]">
-                <Chip label={`번호 : ${todo.id}`} variant="outlined"></Chip>
-                <Chip label={`날짜 : ${todo.regDate}`} variant="outlined"></Chip>
-                <div className="tw-p-10 tw-rounded-[20px] tw-shadow tw-whitespace-pre-wrap tw-leading-relaxed">
-                  할 일 : {todo.content}
+                <Chip
+                  className="tw-pt-3"
+                  label={`번호 : ${todo.id}`}
+                  variant="outlined"
+                  color="secondary"></Chip>
+                <Chip
+                  className="tw-pt-3"
+                  label={`날짜 : ${todo.regDate}`}
+                  variant="outlined"></Chip>
+                <div className="tw-p-10 tw-rounded-[20px] tw-shadow tw-whitespace-pre-wrap tw-leading-relaxed tw-break-words tw-text-[--mui-color-warning-main]">
+                  {todo.content}
                 </div>
               </div>
             </li>
@@ -222,9 +237,10 @@ const App = () => {
       </nav>
     </>
   );
-};
+}
 
 export default function themeApp() {
+  const theme = RootTheme();
   console.log('실행 2');
   return (
     <ThemeProvider theme={theme}>
