@@ -222,13 +222,19 @@ function App() {
                   className="tw-pt-3"
                   label={`번호 : ${todo.id}`}
                   variant="outlined"
-                  color="secondary"></Chip>
+                  color="primary"></Chip>
                 <Chip
                   className="tw-pt-3"
                   label={`날짜 : ${todo.regDate}`}
                   variant="outlined"></Chip>
-                <div className="tw-p-10 tw-rounded-[20px] tw-shadow tw-whitespace-pre-wrap tw-leading-relaxed tw-break-words tw-text-[--mui-color-warning-main]">
-                  {todo.content}
+                <div className="tw-p-10 tw-rounded-[20px] tw-shadow tw-flex">
+                  <Button className="tw-rounded-[20px_0_0_20px] hover:tw-bg-red-300 tw-flex-shrink-0 tw-items-center">
+                    <span>체크박스</span>
+                  </Button>
+                  <div className="tw-bg-blue-500 tw-flex-grow hover:tw-text-[--mui-color-primary-main] tw-whitespace-pre-wrap tw-leading-relaxed tw-break-words">
+                    {todo.content}
+                  </div>
+                  <div className="tw-bg-green-500 tw-w-[150px] tw-flex-shrink-0">후</div>
                 </div>
               </div>
             </li>
@@ -241,6 +247,7 @@ function App() {
 
 export default function themeApp() {
   const theme = RootTheme();
+
   console.log('실행 2');
   return (
     <ThemeProvider theme={theme}>
