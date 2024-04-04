@@ -18,7 +18,7 @@ import { FaBars, FaCheck, FaEllipsisH } from 'react-icons/fa';
 import RootTheme from './theme';
 import dateToStr from './dateUtil';
 
-function useTodosState() {
+function useTodosStatus() {
   const [todos, setTodos] = React.useState([]);
   const lastTodoIdRef = React.useRef(0);
 
@@ -134,19 +134,33 @@ const TodoListItem = ({ todo, index, openDrawer }) => {
   );
 };
 
+// 해당 todo option에 대한 drawer 열기, 닫기
+function useTodoOptionDrawerStatus() {
+  const [todoId, setTodoId] = React.useState(null);
+
+  const opened = React.useMemo(() => todoId !== null, [todoId]);
+  const open = (id) => setTodoId(id);
+  const close = () => setTodoId(null);
+
+  return {
+    todoId,
+    open,
+    close,
+    opened,
+  };
+}
+
 const TodoList = ({ todosState }) => {
-  const [optionDrawerTodoId, setOptionDrawerTodoId] = React.useState(null);
-
-  const drawerOpened = React.useMemo(() => optionDrawerTodoId !== null, [optionDrawerTodoId]);
-
-  const openDrawer = (id) => setOptionDrawerTodoId(id);
-  const closeDrawer = () => setOptionDrawerTodoId(null);
+  const todoOptionDrawerStatus = useTodoOptionDrawerStatus();
 
   return (
     <>
-      <Drawer anchor="right" open={drawerOpened} onClose={closeDrawer}>
+      <Drawer
+        anchor="right"
+        open={todoOptionDrawerStatus.opened}
+        onClose={todoOptionDrawerStatus.close}>
         <div className="tw-p-[30px] tw-flex tw-gap-x-[5px]">
-          {optionDrawerTodoId}번 todo에 대한 옵션 Drawer
+          {todoOptionDrawerStatus.todoId}번 todo에 대한 옵션 Drawer
           <div>수정</div>
           <div>삭제</div>
         </div>
@@ -155,7 +169,12 @@ const TodoList = ({ todosState }) => {
       <nav>
         <ul>
           {todosState.todos.map((todo, index) => (
-            <TodoListItem key={todo.id} todo={todo} index={index} openDrawer={openDrawer} />
+            <TodoListItem
+              key={todo.id}
+              todo={todo}
+              index={index}
+              openDrawer={todoOptionDrawerStatus.open}
+            />
           ))}
         </ul>
       </nav>
@@ -164,7 +183,7 @@ const TodoList = ({ todosState }) => {
 };
 
 function App() {
-  const todosState = useTodosState(); // 리액트 커스텀 훅
+  const todosState = useTodosStatus(); // 리액트 커스텀 훅
 
   React.useEffect(() => {
     todosState.addTodo('스쿼트\n런지');
