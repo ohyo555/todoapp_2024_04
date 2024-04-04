@@ -16,8 +16,9 @@ import {
   MenuList,
   List,
   ListItem,
-  ListItemButton,
   Divider,
+  ListItemButton,
+  Modal,
 } from '@mui/material';
 import { FaBars, FaCheck, FaEllipsisH, FaTrash } from 'react-icons/fa';
 import { FaPenToSquare } from 'react-icons/fa6';
@@ -145,6 +146,7 @@ function useTodoOptionDrawerStatus() {
   const [todoId, setTodoId] = React.useState(null);
 
   const opened = React.useMemo(() => todoId !== null, [todoId]);
+
   const open = (id) => setTodoId(id);
   const close = () => setTodoId(null);
 
@@ -156,7 +158,28 @@ function useTodoOptionDrawerStatus() {
   };
 }
 
+// modal 열기, 닫기
+function useEditTodoModalStatus() {
+  const [opened, setOpened] = React.useState(false);
+
+  const open = () => {
+    setOpened(true);
+  };
+
+  const close = () => {
+    setOpened(false);
+  };
+
+  return {
+    opened,
+    open,
+    close,
+  };
+}
+
 function TodoOptionDrawer({ status }) {
+  const editTodoModalStatus = useEditTodoModalStatus();
+
   return (
     <>
       <SwipeableDrawer anchor="top" open={status.opened} onClose={status.close} onOpen={() => {}}>
@@ -166,7 +189,9 @@ function TodoOptionDrawer({ status }) {
             <span>Your Todo</span>
           </ListItem>
           <Divider className="tw-my-[5px]" />
-          <ListItemButton className="tw-p-[15px_20px] tw-flex tw-gap-2 tw-items-center">
+          <ListItemButton
+            onClick={editTodoModalStatus.open}
+            className="tw-p-[15px_20px] tw-flex tw-gap-2 tw-items-center">
             <span>수정</span>
             <FaPenToSquare className="block tw-mt-[-5px]" />
           </ListItemButton>
@@ -176,6 +201,12 @@ function TodoOptionDrawer({ status }) {
           </ListItemButton>
         </List>
       </SwipeableDrawer>
+      <Modal
+        open={editTodoModalStatus.opened}
+        onClose={editTodoModalStatus.close}
+        className="tw-flex tw-justify-center tw-items-center">
+        <div className="tw-bg-white tw-p-10 tw-rounded-[20px]">안녕</div>
+      </Modal>
     </>
   );
 }
@@ -204,7 +235,7 @@ const TodoList = ({ todosState }) => {
 };
 
 function App() {
-  const todosState = useTodosStatus(); // 리액트 커스텀 훅
+  const todosState = useTodosStatus();
 
   React.useEffect(() => {
     todosState.addTodo('스쿼트\n런지');
