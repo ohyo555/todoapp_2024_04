@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useState } from 'react';
 import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { ThemeProvider } from '@mui/material/styles';
 import classNames from 'classnames';
@@ -155,6 +156,12 @@ const NewTodoForm = ({ noticeSnackbarStatus }) => {
 };
 
 const TodoListItem = ({ todo, index, openDrawer }) => {
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxClick = () => {
+    setIsChecked(!isChecked); // Toggle isChecked state on click
+  };
+
   return (
     <>
       <li key={todo.id}>
@@ -169,15 +176,16 @@ const TodoListItem = ({ todo, index, openDrawer }) => {
             />
           </div>
           <div className="tw-rounded-[10px] tw-shadow tw-flex tw-text-[14px] tw-min-h-[80px]">
-            <Button className="tw-flex-shrink-0 tw-rounded-[10px_0_0_10px]" color="inherit">
+            <Button
+              className="tw-flex-shrink-0 tw-rounded-[10px_0_0_10px]"
+              color="inherit"
+              onClick={handleCheckboxClick} // Handle checkbox click
+            >
               <FaCheck
-                className={classNames(
-                  'tw-text-3xl',
-                  {
-                    'tw-text-[--mui-color-primary-main]': index % 2 == 0,
-                  },
-                  { 'tw-text-[#dcdcdc]': index % 2 != 0 },
-                )}
+                className={classNames('tw-text-3xl', {
+                  'tw-text-[--mui-color-primary-main]': isChecked, // Apply primary color if checked
+                  'tw-text-[#dcdcdc]': !isChecked, // Apply gray color if not checked
+                })}
               />
             </Button>
             <div className="tw-bg-[#dcdcdc] tw-w-[2px] tw-h-[60px] tw-self-center"></div>

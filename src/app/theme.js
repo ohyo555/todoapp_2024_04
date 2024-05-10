@@ -22,13 +22,13 @@ export default function RootTheme() {
       },
       type: 'dark',
       primary: {
-        main: '#2196f3',
+        main: '#4a87ba',
         light: 'rgb(77, 171, 245)',
         dark: 'rgb(23, 105, 170)',
         contrastText: '#fff',
       },
       secondary: {
-        main: '#f50057',
+        main: '#83b4de',
       },
     },
   });
