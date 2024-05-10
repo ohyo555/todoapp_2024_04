@@ -25,3 +25,27 @@
 ![android](https://github.com/ohyo555/todoapp_2024_04/assets/153146836/d7162921-efc0-4156-b8cf-21b0f34c4f57)
 
 - 위의 프로젝트를 android studio에서 실행
+
+
++ 추가 (체크 기능 적용)
+![image](https://github.com/ohyo555/todoapp_2024_04/assets/153146836/8380faa2-de9f-495b-9cac-dffe8bf14e62)
+```
+const [isChecked, setIsChecked] = useState(false); // 확인란의 체크박스 상태 결정
+
+const handleCheckboxClick = () => { // 버튼 클릭 할 때 isChecked로 바꿔주기!
+  setIsChecked(!isChecked);
+};
+
+<Button
+  className="tw-flex-shrink-0 tw-rounded-[10px_0_0_10px]"
+  color="inherit"
+  onClick={handleCheckboxClick}
+>
+  <FaCheck
+    className={classNames('tw-text-3xl', {
+      'tw-text-[--mui-color-primary-main]': isChecked, // 체크면 기본 색상 
+      'tw-text-[#dcdcdc]': !isChecked, // 체크 안했을 땐 회색
+    })}
+  />
+</Button>
+```
