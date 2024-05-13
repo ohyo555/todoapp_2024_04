@@ -4,6 +4,10 @@
 
 ![todoapp](https://github.com/ohyo555/todoapp_2024_04/assets/153146836/9203cb6e-2709-422e-a9b1-649e4a8ca122)
 
+- ⚙ 개발환경
+   * VSCode
+   * Android Studio
+     
 - 구조
   * todosAtom: 할 일 목록을 관리
   * lastTodoIdAtom: 마지막 할 일의 ID를 관리
