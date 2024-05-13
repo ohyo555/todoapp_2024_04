@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
 import { ThemeProvider } from '@mui/material/styles';
 import classNames from 'classnames';
 import {
@@ -29,6 +30,7 @@ import { FaPenToSquare } from 'react-icons/fa6';
 import RootTheme from './theme';
 import dateToStr from './dateUtil';
 
+const { persistAtom } = recoilPersist();
 const todosAtom = atom({
   key: 'app/todosAtom',
   default: [],
@@ -158,6 +160,8 @@ const NewTodoForm = ({ noticeSnackbarStatus }) => {
 const TodoListItem = ({ todo, index, openDrawer }) => {
   const [isChecked, setIsChecked] = useState(false);
 
+  const todosStatus = useTodosStatus();
+
   const handleCheckboxClick = () => {
     setIsChecked(!isChecked); // Toggle isChecked state on click
   };
@@ -189,17 +193,28 @@ const TodoListItem = ({ todo, index, openDrawer }) => {
               />
             </Button>
             <div className="tw-bg-[#dcdcdc] tw-w-[2px] tw-h-[60px] tw-self-center"></div>
-            <div className="tw-bg-blue-300 tw-flex tw-items-center tw-p-3 tw-flex-grow hover:tw-text-[--mui-color-primary-main] tw-whitespace-pre-wrap tw-leading-relaxed tw-break-words">
-              {todo.content}
-            </div>
             <Button
+              onClick={() => {
+                openDrawer(todo.id);
+              }}
+              className="tw-bg-blue-300 tw-flex tw-items-center tw-p-3 tw-flex-grow hover:tw-text-[--mui-color-primary-main] tw-whitespace-pre-wrap tw-leading-relaxed tw-break-words">
+              {todo.content}
+            </Button>
+            <Button
+              onClick={() => {
+                todosStatus.removeTodo(todo.id);
+              }}>
+              삭제
+              <FaTrash className="block tw-mt-[-5px]" />
+            </Button>
+            {/*           <Button
               onClick={() => {
                 openDrawer(todo.id);
               }}
               className="tw-flex-shrink-0 tw-rounded-[0_10px_10px_0]"
               color="inherit">
               <FaEllipsisH className="tw-text-[#dcdcdc] tw-text-2xl" />
-            </Button>
+            </Button> */}
           </div>
         </div>
       </li>
@@ -336,12 +351,6 @@ function TodoOptionDrawer({ status, noticeSnackbarStatus }) {
             className="tw-p-[15px_20px] tw-flex tw-gap-2 tw-items-center">
             <span>수정</span>
             <FaPenToSquare className="block tw-mt-[-5px]" />
-          </ListItemButton>
-          <ListItemButton
-            className="tw-p-[15px_20px] tw-flex tw-gap-2 tw-items-center"
-            onClick={removeTodo}>
-            <span>삭제</span>
-            <FaTrash className="block tw-mt-[-5px]" />
           </ListItemButton>
         </List>
       </SwipeableDrawer>
